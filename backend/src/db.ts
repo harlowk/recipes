@@ -16,7 +16,7 @@ export const createAndConnectToServer = async (): Promise<typeof mongoose> => {
     autoStart: false,
   })
   await mongod.start()
-  const url = await mongod.getConnectionString()
+  const url = await mongod.getUri()
   const connection = await mongoose.connect(url, {
     useNewUrlParser: true,
     keepAlive: true,
