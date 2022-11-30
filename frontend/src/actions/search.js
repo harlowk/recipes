@@ -30,10 +30,13 @@ export const executeSearch = async (name, ingredients) => {
 
 // TODO: fix action
 export const searchRecipes = (name, ingredients) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(fetchingSearch())
-    return executeSearch(name, ingredients)
-      .then((res) => fetchedSearch(res))
-      .catch((err) => dispatch(failedSearch(err)))
+    try {
+      const searchResults = await executeSearch(name, ingredients)
+      dispatch(fetchedSearch(searchResults))
+    } catch (e) {
+      dispatch(failedSearch(e))
+    }
   }
 }

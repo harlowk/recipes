@@ -1,17 +1,18 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import { bindActionCreators } from "redux"
-import { HomeWrapper } from "./styles"
-import Input from "@material-ui/core/Input"
-import Checkbox from "@material-ui/core/Checkbox"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import Divider from "@material-ui/core/Divider"
 import Button from "@material-ui/core/Button"
+import Checkbox from "@material-ui/core/Checkbox"
+import Divider from "@material-ui/core/Divider"
+import FormControlLabel from "@material-ui/core/FormControlLabel"
+import Input from "@material-ui/core/Input"
 import LinearProgress from "@material-ui/core/LinearProgress"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
+import React, { Component } from "react"
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
 import * as actions from "../../actions"
+import RecipeInspector from "../Recipe"
+import { HomeWrapper } from "./styles"
 
 const ingredientList = ["flour", "sugar", "salt", "butter", "milk"]
 
@@ -20,20 +21,59 @@ class Home extends Component {
     super(props)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleIngredient = this.handleIngredient.bind(this)
+    this.handleRecipeClick = this.handleRecipeClick.bind(this)
     this.fetchSearch = this.fetchSearch.bind(this)
+    this.encodeState = this.encodeState.bind(this);
+    this.decodeState = this.decodeState.bind(this);
     this.state = {
       term: "",
-      ingredients: ["milk"],
+      ingredients: ["milk"]
     }
   }
-  fetchSearch() {
-    // TODO: something is missing here for fetching
+
+  encodeState (recipeId) {
+    const encoded = Buffer.from(JSON.stringify({ ...this.state, recipeId: recipeId })).toString('base64');
+    window.history.replaceState({}, "", `/search/${encoded}`)
   }
-  handleSearch(event) {
+
+  decodeState () {
+    try {
+      const parts = window.location.pathname.split('/');
+      if (parts[1] === 'search') {
+        const decoded = Buffer.from(parts[2], 'base64').toString('ascii');
+        const { term, ingredients, recipeId } = JSON.parse(decoded);
+        this.setState({ term: term ?? "", ingredients: ingredients ?? ["milk"] });
+        this.props.searchRecipes(term, ingredients)
+        if (recipeId) {
+          this.props.fetchRecipe(recipeId);
+        }
+      } else if (parts[1] === 'recipe') {
+        this.props.fetchRecipe(parts[2]);
+      }
+    } catch {
+      // do nothing  (logging would be nice))
+      console.log('error decoding state');
+    }
+  }
+
+  fetchSearch () {
+    const { term, ingredients } = this.state
+    this.props.searchRecipes(term, ingredients)
+    this.encodeState();
+  }
+
+  handleSearch (event) {
     const term = event.target.value
     this.setState({ term })
+    this.encodeState();
   }
-  handleIngredient(ingredient, event) {
+
+  handleRecipeClick (recipe) {
+    this.props.fetchRecipe(recipe.id)
+    this.encodeState(recipe.id);
+  }
+
+  handleIngredient (ingredient, event) {
     const { ingredients } = { ...this.state }
     if (event.target.checked) {
       ingredients.push(ingredient)
@@ -42,10 +82,17 @@ class Home extends Component {
       ingredients.splice(foundIngredient, 1)
     }
     this.setState({ ingredients })
+    this.encodeState();
   }
-  render() {
+
+  componentDidMount () {
+    this.decodeState();
+  }
+
+  render () {
     const { term, ingredients } = this.state
-    const { recipes, isLoading } = this.props
+    const { recipes, recipe, isLoading } = this.props
+
     return (
       <HomeWrapper>
         <Input
@@ -73,13 +120,15 @@ class Home extends Component {
         <Button onClick={this.fetchSearch}>search</Button>
         <Divider />
         {recipes && (
-          <List>
-            {recipes.map((recipe) => (
-              <ListItem key={recipe.id}>
-                <ListItemText primary={recipe.name} />
-              </ListItem>
-            ))}
-          </List>
+          <div className="overflow-container">
+            <List>
+              {recipes.map((rp) => (
+                <ListItem key={rp.id} button onClick={this.handleRecipeClick.bind(this, rp)}>
+                  <ListItemText primary={rp.name} className={rp.name === recipe?.name ? "recipe-selected" : "recipe-not-selected"} />
+                </ListItem>
+              ))}
+            </List>
+          </div>
         )}
         {isLoading && <LinearProgress />}
         <Divider />
@@ -88,20 +137,22 @@ class Home extends Component {
           I'm expecting you to have it return null or a component based on the redux state, not passing any props from here
           I want to see how you wire up a component with connect and build actions.
         */}
+        {recipe && <RecipeInspector />}
       </HomeWrapper>
     )
   }
 }
 
 const mapStateToProps = (state) => {
-  const { search } = state
-  return { ...search }
+  const { search, recipe } = state
+  return { ...search, ...recipe }
 }
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       searchRecipes: actions.searchRecipes,
+      fetchRecipe: actions.fetchRecipe,
     },
     dispatch
   )
