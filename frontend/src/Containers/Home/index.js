@@ -1,3 +1,6 @@
+import { Card } from "@material-ui/core"
+import Search from '@material-ui/icons/Search';
+import Kitchen from '@material-ui/icons/Kitchen';
 import Button from "@material-ui/core/Button"
 import Checkbox from "@material-ui/core/Checkbox"
 import Divider from "@material-ui/core/Divider"
@@ -44,9 +47,7 @@ class Home extends Component {
         const { term, ingredients, recipeId } = JSON.parse(decoded);
         this.setState({ term: term ?? "", ingredients: ingredients ?? ["milk"] });
         this.props.searchRecipes(term, ingredients)
-        if (recipeId) {
-          this.props.fetchRecipe(recipeId);
-        }
+        recipeId && this.props.fetchRecipe(recipeId);
       } else if (parts[1] === 'recipe') {
         this.props.fetchRecipe(parts[2]);
       }
@@ -95,27 +96,36 @@ class Home extends Component {
 
     return (
       <HomeWrapper>
-        <Input
-          autoFocus={true}
-          fullWidth={true}
-          onChange={this.handleSearch}
-          value={term}
-        />
+        <Card className="search">
+          <Search />
+          <Input
+            autoFocus={true}
+            fullWidth={true}
+            onChange={this.handleSearch}
+            value={term}
+          />
+        </Card>
         <div>
-          <h3>Ingredients on hand</h3>
-          {ingredientList.map((ingredient) => (
-            <FormControlLabel
-              key={ingredient}
-              control={
-                <Checkbox
-                  checked={ingredients.includes(ingredient)}
-                  onChange={this.handleIngredient.bind(this, ingredient)}
-                  value={ingredient}
+          <Card className="kitchen">
+            <Kitchen />
+            <div>
+              {ingredientList.map((ingredient) => (
+                <FormControlLabel
+                  key={ingredient}
+                  control={
+                    <Checkbox
+                      checked={ingredients.includes(ingredient)}
+                      onChange={this.handleIngredient.bind(this, ingredient)}
+                      value={ingredient}
+                    />
+                  }
+                  label={ingredient}
                 />
-              }
-              label={ingredient}
-            />
-          ))}
+
+              ))}
+              <span>(Ingredients)</span>
+            </div>
+          </Card>
         </div>
         <Button onClick={this.fetchSearch}>search</Button>
         <Divider />

@@ -7,6 +7,21 @@ export const HomeWrapper = styled.div`
   flex-flow: column;
   margin: auto;
   padding: 8px;
+  .search {
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+  .kitchen {
+    width: 100%;
+    display: flex;
+    padding: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+    justify-content: space-between;
+  }
   .overflow-container {
     overflow: auto;
     height: 20vh;
