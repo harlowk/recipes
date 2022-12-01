@@ -9,8 +9,10 @@ export const HomeWrapper = styled.div`
   padding: 8px;
   .search {
     width: 100%;
+    min-height: 50px;
     display: flex;
     flex-flow: row;
+    align-items: center;
     padding: 8px;
     margin-bottom: 8px;
   }
