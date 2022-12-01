@@ -10,6 +10,8 @@ const buildTemplate = path.resolve(staticDir, "index-template.html")
 const srcDir = path.resolve(__dirname, "src")
 const entryPoint = path.resolve(__dirname, "src", "index.js")
 
+const usingDocker = true;
+
 module.exports = {
   mode: process.env.NODE_ENV === "production" ? "production" : "development",
   entry: {
@@ -42,6 +44,8 @@ module.exports = {
     ],
   },
   devServer: {
+    // Docker seems to want the internal container address to be 0.0.0.0 and not localhost, which is the default string for webpack.
+    host: usingDocker ? "0.0.0.0" : "",
     port: 3000,
     contentBase: staticDir,
     historyApiFallback: true,
@@ -49,7 +53,7 @@ module.exports = {
     filename: "[name].bundle.js",
     proxy: {
       "/api/**": {
-        target: "http://localhost:4000/",
+        target: usingDocker ? "http://0.0.0.0:4000" : "http://localhost:4000",
         changeOrigin: true,
       },
     },

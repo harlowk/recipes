@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
-    "lib": ["es2018", "dom"],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "target": "es6",
     "outDir": "dist",
     "sourceMap": true,
-    "jsx": "react"
-  }
+    "jsx": "react",
+  },
 }
