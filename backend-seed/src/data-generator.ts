@@ -1,5 +1,4 @@
 import { LoremIpsum } from "lorem-ipsum"
-import { RecipeModel } from "./models/recipie"
 
 export const ingredientList = ["flour", "sugar", "salt", "butter", "milk"]
 
@@ -112,14 +111,3 @@ export const builtRecipes = recipeNames.map((name) => {
     }
 })
 
-
-export const seedDatabase = async (): Promise<void> => {
-    try {
-        // await RecipeModel.deleteAll();
-        for (const recipe of builtRecipes.slice(0, 10)) {
-            await RecipeModel.createRecipe(recipe)
-        }
-    } catch (err) {
-        console.error(err)
-    }
-}

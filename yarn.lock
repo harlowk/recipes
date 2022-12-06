@@ -3558,6 +3558,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wcym/backend-seed@workspace:backend-seed":
+  version: 0.0.0-use.local
+  resolution: "@wcym/backend-seed@workspace:backend-seed"
+  dependencies:
+    "@aws-sdk/client-dynamodb": ^3.208.0
+    "@babel/core": 7.12.10
+    "@babel/plugin-transform-runtime": 7.12.10
+    "@babel/plugin-transform-typescript": 7.12.1
+    "@babel/preset-env": 7.12.11
+    "@babel/preset-typescript": 7.12.7
+    "@types/express": 4.17.3
+    "@types/node": 14.17.15
+    "@typescript-eslint/eslint-plugin": 2.24.0
+    "@typescript-eslint/parser": 2.24.0
+    babel-eslint: 10.1.0
+    esbuild: 0.12.18
+    esbuild-register: 2.6.0
+    eslint: 6.8.0
+    lodash: 4.17.15
+    lorem-ipsum: 2.0.3
+    typescript: 4.2.4
+  languageName: unknown
+  linkType: soft
+
 "@wcym/backend@workspace:backend":
   version: 0.0.0-use.local
   resolution: "@wcym/backend@workspace:backend"

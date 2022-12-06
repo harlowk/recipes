@@ -8,15 +8,17 @@
   "private": true,
   "workspaces": [
     "backend/",
-    "frontend/"
+    "frontend/",
+    "backend-seed/"
   ],
   "scripts": {
     "vsc": "sdks vscode",
     "build": "yarn workspaces foreach -piv --topological-dev -j 2 run build",
     "lint": "yarn workspaces foreach -ptv -j 2 run lint",
     "start": "yarn workspaces foreach -piv -j 2 run start",
-    "docker-terraform-up": "docker-compose -f docker-compose.terraform.yml up",
+    "docker-terraform-up": "docker-compose -f docker-compose.terraform.yml up -d",
     "docker-terraform-down": "docker-compose -f docker-compose.terraform.yml down",
+    "docker-terraform-build": "docker-compose -f docker-compose.terraform.yml build --no-cache",
     "docker-app-up": "docker-compose -f docker-compose.app.yml up",
     "docker-app-down": "docker-compose -f docker-compose.app.yml down",
     "docker-app-build": "docker-compose -f docker-compose.app.yml build --no-cache",

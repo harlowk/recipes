@@ -1,21 +1,19 @@
 {
-  "name": "@wcym/backend",
+  "name": "@wcym/backend-seed",
   "version": "0.0.1",
-  "description": "a simple backend of recipe content",
+  "description": "Backend seed",
   "main": "dist/index.js",
   "repository": "git@github.com:zeal-corp/what-can-you-make.git",
   "author": "zeal",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf ./dist",
+    "build": "yarn clean && tsc",
     "lint": "eslint src/ --ext .ts",
-    "start": "nodemon -e ts --exec yarn dev-be",
-    "dev-be": "node -r esbuild-register --inspect=0.0.0.0:9229 src/index.ts"
+    "start": "node -r esbuild-register src/index.ts"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.208.0",
-    "body-parser": "1.19.0",
-    "express": "4.17.1",
     "lodash": "4.17.15"
   },
   "devDependencies": {
@@ -33,7 +31,6 @@
     "esbuild-register": "2.6.0",
     "eslint": "6.8.0",
     "lorem-ipsum": "2.0.3",
-    "nodemon": "2.0.7",
     "typescript": "4.2.4"
   }
 }

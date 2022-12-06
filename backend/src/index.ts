@@ -5,8 +5,7 @@ import { recipeMiddleware, searchMiddleware } from "./routes"
 
 const appStartup = async (): Promise<void> => {
   const app = express()
-  // add parsers for the body
-  // await seedDatabase()
+
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
   // create our routes

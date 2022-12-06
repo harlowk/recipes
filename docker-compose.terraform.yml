@@ -21,3 +21,18 @@ services:
     entrypoint: sh
     command: >
       -c " cp -R /tmp/test/terraform/* /opt/work/ &&    terraform init && terraform apply -auto-approve -backup="-" -no-color &&  cp -R /opt/work/.terraform /opt/work/terraform.tfstate /tmp/test/terraform/ "
+
+  backend_seed:
+    build: ./backend-seed
+    container_name: backend_seed
+    restart: on-failure
+    depends_on:
+      - terraform
+      - localstack
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=some-key
+      - AWS_SECRET_ACCESS_KEY=some-secret
+      - AWS_DEFAULT_REGION=us-east-1
+      - DEFAULT_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://host.docker.internal:4566
