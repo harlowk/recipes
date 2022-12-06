@@ -127,6 +127,7 @@ class Home extends Component {
             </div>
           </Card>
         </div>
+        <Button onClick={() => this.props.history.push('/create')}>Create</Button>
         <Button onClick={this.fetchSearch}>search</Button>
         <Divider />
         {recipes && (

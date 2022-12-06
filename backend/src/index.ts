@@ -1,18 +1,26 @@
 import bodyParser from "body-parser"
 import express from "express"
 import http from "http"
-import { recipeMiddleware, searchMiddleware } from "./routes"
+import { errorHandlerMiddleware } from "./middleware/errorHandler"
+import { requestLoggerMiddleware } from "./middleware/requestLogger"
+import { createRecipeMiddleware, recipeMiddleware, searchMiddleware } from "./routes"
 
 const appStartup = async (): Promise<void> => {
   const app = express()
 
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
+
+  app.use(errorHandlerMiddleware)
+  app.use(requestLoggerMiddleware)
+
+  // ecs health checks
+  app.get("/health", (_, res) => res.send("OK"))
+  app.get("/api/health", (_, res) => res.send("OK"))
+
   // create our routes
-  app.get("/health", (req, res) => res.send("OK"))
-  app.get("/api/health", (req, res) => res.send("OK"))
-  app.get("/api/test", (req, res) => res.send({ message: "Hello World" }))
   app.post("/api/search", searchMiddleware)
+  app.post("/api/recipe", createRecipeMiddleware)
   app.get("/api/recipe/:id", recipeMiddleware)
   // create a server
   const httpServer = new http.Server(app)

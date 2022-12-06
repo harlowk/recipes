@@ -9,6 +9,7 @@ import {
 import { applyMiddleware, createStore } from "redux"
 import thunkMiddleware from "redux-thunk"
 import Home from "./Containers/Home"
+import Create from "./Containers/Create"
 import reducers from "./reducers"
 
 const store = createStore(reducers, applyMiddleware(thunkMiddleware))
@@ -17,9 +18,10 @@ const WrappedHome = () => (
   <Provider store={store}>
     <Router>
       <Switch>
-        <Route path="/" exact={false} component={Home} />
-        <Route path="/search/:id" component={Home} />
-        <Route path="/recipe/:name" component={Home} />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/search/:id" component={Home} />
+        <Route exact path="/recipe/:name" component={Home} />
+        <Route exact path="/create" component={Create} />
       </Switch>
     </Router>
   </Provider>

@@ -1,12 +1,6 @@
 import { Request, Response } from "express"
 import { RecipeModel } from "../database/models/recipie"
 
-// `const allIngredients = ["flour", "sugar", "salt", "butter", "milk"]
-
-// const escapeRegex = (text: string): string => {
-//   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
-// }`
-
 export const searchMiddleware = async (
   req: Request,
   res: Response

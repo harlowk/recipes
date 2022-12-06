@@ -117,7 +117,7 @@ export class RecipeModel {
                             M: {
                                 name: { S: ingredient.name },
                                 unit: { S: ingredient.unit },
-                                amount: { N: ingredient.amount.toString() }
+                                amount: { N: ingredient.amount?.toString() || "0" }
                             }
                         }
                     })
@@ -148,22 +148,6 @@ export class RecipeModel {
                 }
             }) as Ingredient[]
         }) : null
-    }
-
-    public static async deleteAll(): Promise<void> {
-        const recipes = await ddbClient.send(new ScanCommand({
-            TableName: TABLE_NAME
-        }));
-
-        const items = recipes.Items || []
-        for (const item of items) {
-            await ddbClient.send(new DeleteItemCommand({
-                TableName: TABLE_NAME,
-                Key: {
-                    id: { S: item.id.S }
-                }
-            }))
-        }
     }
 }
 
