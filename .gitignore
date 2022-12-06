@@ -13,5 +13,5 @@ terraform/.terraform
 terra-apply.sh
 terraform/terraform.tfstate.backup
 terraform/terraform.tfstate
-terraform-localstack/**
-terraform-localstack/**/**
+terraform-localstack/.terraform.lock.hcl
+terraform-localstack/.terraform
