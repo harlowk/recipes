@@ -1,0 +1,35 @@
+version: '3'
+services:
+
+  backend:
+    build: ./backend
+    container_name: backend
+    restart: always
+    ports:
+      - "4000:4000"
+    networks:
+      - my-network
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=some-key
+      - AWS_SECRET_ACCESS_KEY=some-secret
+      - AWS_DEFAULT_REGION=us-east-1
+      - DEFAULT_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://host.docker.internal:4566
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "8080:8080"
+    networks:
+      - my-network
+    environment:
+      - BACKEND_PROXY_HOST=backend
+
+networks:
+  my-network:
+    driver: bridge

@@ -6,10 +6,12 @@ dist
 # yarn 3 stuff
 
 .yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 .vscode/settings.json
+terraform/.terraform.lock.hcl
+terraform/.terraform
+.env
+terra-apply.sh
+terraform/terraform.tfstate.backup
+terraform/terraform.tfstate
+terraform-localstack/**
+terraform-localstack/**/**

@@ -1,5 +1,6 @@
-import { Request, Response, NextFunction } from "express"
-import { Recipe, RecipeModel } from "../models"
+import { Request, Response } from "express";
+import { RecipeModel } from "../database/models/recipie";
+
 
 /* 
   Get a recipe by id
@@ -10,11 +11,14 @@ export const recipeMiddleware = async (
   res: Response
 ): Promise<void> => {
   const { id } = req.params
-  let recipe: Recipe | null = null
   try {
-    recipe = (await RecipeModel.findById(id).exec()) || null
+    const recipe = await RecipeModel.getRecipe(id);
+    res.send(recipe?.toDetail() ?? null);
   } catch (err) {
-    console.log("Recipe Issue: ", err)
+    console.error(err)
+    res.status(500).send({
+      message: "An error occurred while retrieving the recipe",
+      error: err
+    });
   }
-  res.send(recipe?.toDetail())
 }

@@ -1,16 +1,18 @@
-import express from "express"
 import bodyParser from "body-parser"
+import express from "express"
 import http from "http"
-import { createAndConnectToServer } from "./db"
-import { searchMiddleware, recipeMiddleware } from "./routes"
+import { recipeMiddleware, searchMiddleware } from "./routes"
 
 const appStartup = async (): Promise<void> => {
-  await createAndConnectToServer()
   const app = express()
   // add parsers for the body
+  // await seedDatabase()
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
   // create our routes
+  app.get("/health", (req, res) => res.send("OK"))
+  app.get("/api/health", (req, res) => res.send("OK"))
+  app.get("/api/test", (req, res) => res.send({ message: "Hello World" }))
   app.post("/api/search", searchMiddleware)
   app.get("/api/recipe/:id", recipeMiddleware)
   // create a server

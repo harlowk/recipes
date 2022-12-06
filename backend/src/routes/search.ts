@@ -1,11 +1,11 @@
 import { Request, Response } from "express"
-import { RecipeModel } from "../models"
+import { RecipeModel } from "../database/models/recipie"
 
-const allIngredients = ["flour", "sugar", "salt", "butter", "milk"]
+// `const allIngredients = ["flour", "sugar", "salt", "butter", "milk"]
 
-const escapeRegex = (text: string): string => {
-  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
-}
+// const escapeRegex = (text: string): string => {
+//   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
+// }`
 
 export const searchMiddleware = async (
   req: Request,
@@ -13,10 +13,14 @@ export const searchMiddleware = async (
 ): Promise<void> => {
   const { name, ingredients } = req.body
 
-  const recipes = await RecipeModel
-    .find({ name: new RegExp(escapeRegex(name), "gi") })
-    .find({ "ingredients.name": { $nin: allIngredients.filter((ing) => !ingredients.includes(ing)) } })
-    .exec()
-
-  res.send(recipes.map((r) => r.toTag()))
+  try {
+    const recipes = await RecipeModel.getRecipes({ name, ingredients })
+    res.send(recipes.map(recipe => recipe.toTag()))
+  } catch (err) {
+    console.error(err)
+    res.status(500).send({
+      message: "An error occurred while retrieving the recipes",
+      error: err
+    })
+  }
 }

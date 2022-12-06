@@ -17,7 +17,7 @@ const WrappedHome = () => (
   <Provider store={store}>
     <Router>
       <Switch>
-        <Route path="/" exact component={Home} />
+        <Route path="/" exact={false} component={Home} />
         <Route path="/search/:id" component={Home} />
         <Route path="/recipe/:name" component={Home} />
       </Switch>
